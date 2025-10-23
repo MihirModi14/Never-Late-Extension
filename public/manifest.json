@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Never Late Extension",
+  "version": "1.0.0",
+  "description": "Get timely reminders for your tasks and meetings with this extension.",
+  "permissions": ["identity", "storage", "alarms", "notifications"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "matches": ["<all_urls>"]
+  }
+}
