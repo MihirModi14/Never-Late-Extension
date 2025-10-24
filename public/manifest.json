@@ -10,5 +10,9 @@
   "action": {
     "default_popup": "index.html",
     "matches": ["<all_urls>"]
+  },
+  "oauth2": {
+    "client_id": "5119441177-e1i1mj69u1cd2mefdnaueh6ma9m6a27l.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/calendar.readonly"]
   }
 }

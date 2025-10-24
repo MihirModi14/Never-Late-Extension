@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Primary */
+    --primary: #111827;
+    --primary-hover: #1f2937;
+
+    /* Background */
+    --background: #f9fafb;
+    --card: #ffffff;
+
+    /* Text */
+    --text-primary: #111827;
+    --text-secondary: #374151;
+    --text-tertiary: #6b7280;
+    --text-muted: #9ca3af;
+
+    /* Borders */
+    --border: #e5e7eb;
+    --border-light: #f3f4f6;
+    --border-input: #d1d5db;
+
+    /* Status - Ongoing */
+    --status-ongoing-bg: #eff6ff;
+    --status-ongoing-border: #bfdbfe;
+    --status-ongoing-text: #2563eb;
+
+    /* Optional Badge */
+    --optional-bg: #fffbeb;
+    --optional-text: #d97706;
+  }
+}
