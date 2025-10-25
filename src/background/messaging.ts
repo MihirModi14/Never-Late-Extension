@@ -16,7 +16,7 @@ export type MessageCallback = (
 export const messaging = {
   // Send a message to the background or other contexts
   send: async <T = unknown>(message: Message): Promise<T | undefined> => {
-    return new Promise<T | undefined>((resolve, reject) => {
+    return new Promise<T | undefined>((resolve, _) => {
       chrome.runtime.sendMessage(message, (response) => {
         if (chrome.runtime.lastError) {
           logger.error('Messaging error:', chrome.runtime.lastError.message);

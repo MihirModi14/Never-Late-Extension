@@ -1,7 +1,6 @@
 import {
   ApiConfig,
   ApiErrorResponse,
-  ApiResponse,
   AxiosRequest,
 } from "../types/Api.type";
 import axios, { AxiosError } from "axios";
@@ -74,12 +73,8 @@ export const apiCall = async <ResponsePayload, RequestBody = undefined>(
   return axiosInstance
     .request<ResponsePayload, ResponsePayload, RequestBody>(apiReqConfig)
     .then((response) => {
-      const { show, message } = response as ApiResponse<unknown>;
-      if (show && showSuccessToast && message) {
+      if (showSuccessToast) {
         //success toast
-      }
-      if (scrollToTop) {
-        //scroll to top
       }
       return response;
     })

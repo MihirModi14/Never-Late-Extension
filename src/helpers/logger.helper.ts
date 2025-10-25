@@ -10,7 +10,7 @@ const colors = {
 
 export const logger = {
   currentDateTime: () =>
-    formatDate(new Date().toISOString(), DATE_FORMAT.YYYY_MM_DD_H_M_S),
+    formatDate(new Date().toISOString(), DATE_FORMAT.YYYY_MM_DD_H_M),
 
   log(...args: unknown[]) {
     console.log(
