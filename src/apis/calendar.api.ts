@@ -1,6 +1,6 @@
 import { apiCall } from "../utils/api-manager";
 import { ENDPOINTS } from "../constants/endpoints.constant";
-import { CalendarApiResponse } from "../types/calender.type";
+import { CalendarApiResponse } from "../types/calendar.type";
 
 const calendarApi = {
   getCalendarList: (params: URLSearchParams): Promise<CalendarApiResponse> => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { logger } from "./helpers/logger.helper";
 import "./App.css";
-import type { CalendarEvent } from "./types/calender.type";
+import type { CalendarEvent } from "./types/calendar.type";
 import { calenderEvent } from "./constants/calender.constant";
 import { formatDate } from "./helpers/date.helper";
 import { DATE_FORMAT } from "./constants/common.constant";
