@@ -1,47 +1,17 @@
-import { getAccessToken } from './auth';
 import { storage } from './storage';
 import { messaging } from './messaging';
-
-export interface CalendarEvent {
-  id: string;
-  summary?: string;
-  description?: string;
-  start: { dateTime?: string; date?: string };
-  end: { dateTime?: string; date?: string };
-  [key: string]: unknown;
-}
-
-interface CalendarApiResponse {
-  items: CalendarEvent[];
-  nextPageToken?: string;
-  [key: string]: unknown;
-}
+import { calendarApi } from '../apis/calendar.api';
+import { logger } from '../helpers/logger.helper';
 
 // Main fetch function
-export const fetchCalendarEvents = async (): Promise<void> => {
-  try {
-    const token = await getAccessToken();
-    if (!token) {
-      console.warn('No access token found.');
-      return;
-    }
-
-    const url = `${import.meta.env.VITE_CALENDER_URL}?${getParams().toString()}`;
-    const response = await fetch(url, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch calendar events: ${response.status}`);
-    }
-
-    const data: CalendarApiResponse = await response.json();
-
-    await storage.set({ calendarEvents: data.items });
-    await messaging.send({ type: 'fetched_meetings' });
-  } catch (error) {
-    console.error('Error fetching calendar events:', error);
-  }
+export const getCalendarEventsApi = async (): Promise<void> => {
+  calendarApi.getCalendarList(getParams()).then(response => {
+    logger.log("🚀 ~ getCalendarEventsApi ~ response:", response);
+    storage.set({ calendarEvents: response.items });
+    messaging.send({ type: 'fetched_meetings' });
+  }).catch(error => {
+    logger.error('Error fetching calendar events:', error);
+  })
 };
 
 const getParams = (): URLSearchParams => {
@@ -60,3 +30,31 @@ const getParams = (): URLSearchParams => {
     orderBy: 'startTime',
   });
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const token = await getAccessToken();
+
+// const url = `${import.meta.env.VITE_CALENDER_URL}?${getParams().toString()}`;
+// const response = await fetch(url, {
+//   headers: { Authorization: `Bearer ${token}` },
+// });
+
+// if (!response.ok) {
+//   throw new Error(`Failed to fetch calendar events: ${response.status}`);
+// }
+
+// const data: CalendarApiResponse = await response.json();

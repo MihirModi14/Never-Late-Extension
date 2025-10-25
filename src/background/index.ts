@@ -1,6 +1,6 @@
-import { fetchCalendarEvents } from "./calender";
+import { getCalendarEventsApi } from "./calender";
 import "./alarm";
 
 chrome.runtime.onInstalled.addListener(() => {
-  fetchCalendarEvents();
+  getCalendarEventsApi();
 });

@@ -1,30 +1,5 @@
 import { AxiosRequestConfig, AxiosHeaders, Method } from 'axios';
 
-export type SearchParams = {
-    recordsPerPage?: number;
-    rowNumber?: number;
-    sortBy?: string;
-    sortOrder?: string;
-    search: string;
-};
-
-export type PagerType = {
-    filteredRecords?: number;
-    pageNumber?: number;
-    recordsPerPage: number;
-    sortBy: string;
-    sortOrder: string;
-    totalRecords: number;
-};
-
-export type ApiResponse<T> = {
-    message: string;
-    payload: T;
-    show: boolean;
-    status: number;
-    pager: PagerType;
-};
-
 export type ApiErrorResponse = {
     payload: Record<string, string | boolean> | null;
 };

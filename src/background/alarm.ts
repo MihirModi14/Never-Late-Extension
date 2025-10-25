@@ -1,9 +1,9 @@
-import { fetchCalendarEvents } from "./calender";
+import { getCalendarEventsApi } from "./calender";
 import { logger } from "../helpers/logger.helper";
 
 chrome.alarms.create("fetchEvents", { periodInMinutes: 30 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   logger.log("fetching meetings", new Date().getTime());
-  if (alarm.name === "fetchEvents") fetchCalendarEvents();
+  if (alarm.name === "fetchEvents") getCalendarEventsApi();
 });
