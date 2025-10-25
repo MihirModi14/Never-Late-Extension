@@ -2,19 +2,19 @@ import { getAccessToken } from "./auth";
 import { storage } from "./storage";
 import { messaging } from "./messaging";
 
-export async function fetchCalendarEvents() {
-  const token = await getAccessToken();
+export const fetchCalendarEvents = () => {
+  const token = getAccessToken();
   const url = `${import.meta.env.VITE_CALENDER_URL}?${getParams()}`;
 
-  const response = await fetch(url, {
+  const response = fetch(url, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-  const data = await response.json();
+  const data = response.json();
 
   storage.set({ calendarEvents: data.items });
   messaging.send({ type: "fetched_meetings" });
-}
+};
 
 const getParams = () => {
   const now = new Date();
