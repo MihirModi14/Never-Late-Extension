@@ -1,4 +1,5 @@
 import { getAccessToken } from "./auth";
+import { storage } from "./storage";
 import { logger } from "../helpers/logger.helper";
 
 export async function fetchCalendarEvents() {
@@ -33,7 +34,7 @@ export async function fetchCalendarEvents() {
     const data = await response.json();
 
     // Save for popup or options page
-    chrome.storage.local.set({ calendarEvents: data.items });
+    storage.set({ calendarEvents: data.items });
 
     chrome.runtime.sendMessage({ type: "fetched_meetings" }, () => {
       if (chrome.runtime.lastError) {
