@@ -4,23 +4,7 @@ import { messaging } from "./messaging";
 
 export async function fetchCalendarEvents() {
   const token = await getAccessToken();
-  const now = new Date();
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const endOfDay = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    23,
-    59,
-    59
-  );
-
-  const timeMin = startOfDay.toISOString();
-  const timeMax = endOfDay.toISOString();
-
-  const url = `${
-    import.meta.env.VITE_CALENDER_URL
-  }?timeMin=${timeMin}&timeMax=${timeMax}&maxResults=2500&singleEvents=true&orderBy=startTime`;
+  const url = `${import.meta.env.VITE_CALENDER_URL}?${getParams()}`;
 
   const response = await fetch(url, {
     headers: { Authorization: `Bearer ${token}` },
@@ -31,3 +15,17 @@ export async function fetchCalendarEvents() {
   storage.set({ calendarEvents: data.items });
   messaging.send({ type: "fetched_meetings" });
 }
+
+const getParams = () => {
+  const now = new Date();
+  const startOfDay = new Date(now.setHours(0, 0, 0, 0));
+  const endOfDay = new Date(now.setHours(23, 59, 59, 999));
+
+  return new URLSearchParams({
+    timeMin: startOfDay.toISOString(),
+    timeMax: endOfDay.toISOString(),
+    maxResults: 2500,
+    singleEvents: true,
+    orderBy: "startTime",
+  });
+};

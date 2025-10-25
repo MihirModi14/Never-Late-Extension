@@ -6,7 +6,6 @@ export const messaging = {
       chrome.runtime.sendMessage(message, (response) => {
         if (chrome.runtime.lastError) {
           logger.warn("Messaging error:", chrome.runtime.lastError.message);
-          reject(chrome.runtime.lastError);
         } else {
           resolve(response);
         }
