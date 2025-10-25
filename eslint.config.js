@@ -20,8 +20,8 @@ export default defineConfig([
       globals: globals.browser,
     },
     rules: {
-      "@typescript-eslint/no-explicit-any": "off", // <<< disable the 'any' rule
-      "@typescript-eslint/no-unused-vars": "warn", // <<< disable the 'any' rule
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
     },
   },
 ]);
