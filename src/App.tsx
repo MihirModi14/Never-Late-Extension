@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { logger } from "./helpers/logger.helper";
 import "./App.css";
 import type { CalendarEvent } from "./types/calender.type";
 import { calenderEvent } from "./constants/calender.constant";
@@ -28,7 +29,7 @@ function App() {
       sender: chrome.runtime.MessageSender,
       sendResponse: (response?: any) => void
     ) => {
-      console.log("🚀 ~ App ~ sender:", sender);
+      logger.log("🚀 ~ App ~ sender:", sender);
       if (message.type === "fetched_meetings") {
         getEventList();
         return sendResponse();

@@ -1,4 +1,5 @@
 import { getAccessToken } from "./auth";
+import { logger } from "../helpers/logger.helper";
 
 export async function fetchCalendarEvents() {
   try {
@@ -21,7 +22,9 @@ export async function fetchCalendarEvents() {
     const timeMin = startOfDay.toISOString();
     const timeMax = endOfDay.toISOString();
 
-    const url = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${timeMin}&timeMax=${timeMax}&maxResults=2500&singleEvents=true&orderBy=startTime`;
+    const url = `${
+      import.meta.env.VITE_CALENDER_URL
+    }?timeMin=${timeMin}&timeMax=${timeMax}&maxResults=2500&singleEvents=true&orderBy=startTime`;
 
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
@@ -34,12 +37,12 @@ export async function fetchCalendarEvents() {
 
     chrome.runtime.sendMessage({ type: "fetched_meetings" }, () => {
       if (chrome.runtime.lastError) {
-        console.log("popup is closed");
+        logger.log("popup is closed");
       } else {
-        console.log("refresh done");
+        logger.log("latest meeting fetched");
       }
     });
   } catch (error) {
-    console.error("Error fetching calendar events:", error);
+    logger.error("Error fetching calendar events:", error);
   }
 }
