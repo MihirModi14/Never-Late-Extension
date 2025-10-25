@@ -1,22 +1,38 @@
-import { logger } from "../helpers/logger.helper";
+import { logger } from '../helpers/logger.helper';
+
+// Generic type for messages
+export interface Message {
+  type: string;
+  [key: string]: any;
+}
+
+// Type for the callback in on()
+export type MessageCallback = (
+  message: Message,
+  sender: chrome.runtime.MessageSender,
+  sendResponse: (response?: any) => void
+) => void;
 
 export const messaging = {
-  send: async (message) => {
-    return new Promise((resolve, reject) => {
+  // Send a message to the background or other contexts
+  send: async <T = unknown>(message: Message): Promise<T | undefined> => {
+    return new Promise<T | undefined>((resolve, reject) => {
       chrome.runtime.sendMessage(message, (response) => {
         if (chrome.runtime.lastError) {
-          logger.warn("Messaging error:", chrome.runtime.lastError.message);
+          logger.warn('Messaging error:', chrome.runtime.lastError.message);
+          resolve(undefined);
         } else {
-          resolve(response);
+          resolve(response as T);
         }
       });
     });
   },
 
-  on: (callback) => {
+  // Listen for incoming messages
+  on: (callback: MessageCallback): void => {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       callback(message, sender, sendResponse);
-      // Return true if you want to send a response asynchronously
+      // Return true to indicate async sendResponse support
       return true;
     });
   },
