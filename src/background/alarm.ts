@@ -1,4 +1,4 @@
-import { getCalendarEventsApi } from "./calender";
+import { getCalendarEventsApi } from "./calendar";
 import { logger } from "../helpers/logger.helper";
 
 chrome.alarms.create("fetchEvents", { periodInMinutes: 30 });
