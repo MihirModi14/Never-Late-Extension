@@ -5,9 +5,8 @@ import {
 } from "../types/Api.type";
 import axios, { AxiosError } from "axios";
 import { ACCESS_TOKEN_KEY } from "../constants/storage.constant";
-import { getItemFromStorage } from "../helpers/storage.helper";
-import { DECRYPT } from "../helpers/common.helper";
 import { logger } from "../helpers/logger.helper";
+import { storage } from "../helpers/storage.helper";
 
 let loaderCount = 0;
 
@@ -23,13 +22,15 @@ const defaultApiConfig = {
 };
 
 const axiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_BASE_API,
   headers: {
     ...defaultHeaders,
   },
 });
 
-axiosInstance.interceptors.request.use((config: AxiosRequest) => {
-  const token = DECRYPT(getItemFromStorage(ACCESS_TOKEN_KEY));
+axiosInstance.interceptors.request.use(async (config: AxiosRequest) => {
+  const token = await storage.get(ACCESS_TOKEN_KEY);
+  console.log("🚀 ~ token:", token)
   if (token) {
     config.headers.Authorization = "Bearer " + token;
   }

@@ -1,16 +1,16 @@
-import { storage } from './storage';
 import { messaging } from './messaging';
 import { calendarApi } from '../apis/calendar.api';
+import { storage } from '../helpers/storage.helper';
 import { logger } from '../helpers/logger.helper';
 
 // Main fetch function
-export const getCalendarEventsApi = async (): Promise<void> => {
+export const getCalendarEventsApi = () => {
   calendarApi.getCalendarList(getParams()).then(response => {
-    logger.log("🚀 ~ getCalendarEventsApi ~ response:", response);
+    logger.log("🚀 ~ getCalendarEventsApi ~ response:", JSON.stringify(response));
     storage.set({ calendarEvents: response.items });
     messaging.send({ type: 'fetched_meetings' });
   }).catch(error => {
-    logger.error('Error fetching calendar events:', error);
+    logger.error('Error fetching calendar events:', JSON.stringify(error));
   })
 };
 
@@ -30,31 +30,3 @@ const getParams = (): URLSearchParams => {
     orderBy: 'startTime',
   });
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const token = await getAccessToken();
-
-// const url = `${import.meta.env.VITE_CALENDER_URL}?${getParams().toString()}`;
-// const response = await fetch(url, {
-//   headers: { Authorization: `Bearer ${token}` },
-// });
-
-// if (!response.ok) {
-//   throw new Error(`Failed to fetch calendar events: ${response.status}`);
-// }
-
-// const data: CalendarApiResponse = await response.json();

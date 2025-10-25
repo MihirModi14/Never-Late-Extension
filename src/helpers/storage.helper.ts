@@ -1,23 +1,52 @@
-export const setItemToStorage = <T>(key: string, value: T): void => {
-  localStorage.setItem(key, JSON.stringify(value));
-};
+import { logger } from '../helpers/logger.helper';
 
-export const getItemFromStorage = (key: string): string | null => {
-  return localStorage.getItem(key);
-};
+type StorageKey = string | string[];
+type StorageObject = Record<string, unknown>;
 
-export const removeItemFromStorage = (key: string): boolean => {
-  if (keyExistsInStorage(key)) {
-    localStorage.removeItem(key);
-    return true;
-  }
-  return false;
-};
+export const storage = {
+  get: async <T = unknown>(key: string): Promise<T | null> => {
+    return new Promise((resolve) => {
+      chrome.storage.local.get(key, (result) => {
+        if (chrome.runtime.lastError) {
+          logger.error('Storage get error:', chrome.runtime.lastError);
+          resolve(null);
+        } else {
+          resolve(result[key] as T);
+        }
+      });
+    });
+  },
 
-export const keyExistsInStorage = (key: string): boolean => {
-  return localStorage.getItem(key) !== null;
-};
+  set: async (obj: StorageObject): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.local.set(obj, () => {
+        if (chrome.runtime.lastError) {
+          logger.error('Storage set error:', chrome.runtime.lastError);
+        }
+        resolve();
+      });
+    });
+  },
 
-export const clearStorage = (): void => {
-  localStorage.clear();
+  remove: async (key: StorageKey): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.local.remove(key, () => {
+        if (chrome.runtime.lastError) {
+          logger.error('Storage remove error:', chrome.runtime.lastError);
+        }
+        resolve();
+      });
+    });
+  },
+
+  clear: async (): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.local.clear(() => {
+        if (chrome.runtime.lastError) {
+          logger.error('Storage clear error:', chrome.runtime.lastError);
+        }
+        resolve();
+      });
+    });
+  },
 };
