@@ -4,9 +4,8 @@ import {
   AxiosRequest,
 } from "../types/Api.type";
 import axios, { AxiosError } from "axios";
-import { ACCESS_TOKEN_KEY } from "../constants/storage.constant";
 import { logger } from "../helpers/logger.helper";
-import { storage } from "../helpers/storage.helper";
+import { getStoredToken } from "../background/auth";
 
 let loaderCount = 0;
 
@@ -29,8 +28,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(async (config: AxiosRequest) => {
-  const token = await storage.get(ACCESS_TOKEN_KEY);
-  console.log("🚀 ~ token:", token)
+  const token = await getStoredToken()
   if (token) {
     config.headers.Authorization = "Bearer " + token;
   }

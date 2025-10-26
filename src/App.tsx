@@ -2,16 +2,12 @@ import { useEffect, useState } from "react";
 import { logger } from "./helpers/logger.helper";
 import "./App.css";
 import type { CalendarEvent } from "./types/calendar.type";
-import { calenderEvent } from "./constants/calendar.constant";
 import { formatDate } from "./helpers/date.helper";
 import { DATE_FORMAT } from "./constants/common.constant";
 import { SquareArrowOutUpRight, Users } from "lucide-react";
 
 function App() {
-  const [eventList, setEventList] = useState<CalendarEvent[]>([
-    calenderEvent,
-    calenderEvent,
-  ]);
+  const [eventList, setEventList] = useState<CalendarEvent[]>([]);
 
   useEffect(() => {
     getEventList();
