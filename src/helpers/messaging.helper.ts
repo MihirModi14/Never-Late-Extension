@@ -19,7 +19,7 @@ export const messaging = {
     return new Promise<T | undefined>((resolve) => {
       chrome.runtime.sendMessage(message, (response) => {
         if (chrome.runtime.lastError) {
-          logger.error('Messaging error:', chrome.runtime.lastError.message);
+          logger.warn('[message] ', chrome.runtime.lastError.message);
           resolve(undefined);
         } else {
           resolve(response as T);

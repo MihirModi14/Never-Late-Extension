@@ -66,29 +66,60 @@ export const apiCall = async <ResponsePayload, RequestBody = undefined>(
     ...apiConfig,
   };
 
-  if (showLoader) {
-    showLoading();
+  if (showLoader) showLoading();
+
+  try {
+    const response = await axiosInstance.request<
+      ResponsePayload,
+      ResponsePayload,
+      RequestBody
+    >(apiReqConfig);
+
+    if (showSuccessToast) {
+      // success toast here
+    }
+
+    return response;
+  } catch (error: any) {
+    if (error.response?.status === 401) {
+      logger.warn("[auth] Token expired, attempting refresh...");
+
+      try {
+        const newToken = await auth.getAccessToken(true);
+
+        // Inject new token into header
+        const updatedConfig = {
+          ...apiReqConfig,
+          headers: {
+            ...apiReqConfig.headers,
+            Authorization: `Bearer ${newToken}`,
+          },
+        };
+
+        logger.info("[auth] Retrying request with refreshed token...");
+        const retryResponse = await axiosInstance.request<
+          ResponsePayload,
+          ResponsePayload,
+          RequestBody
+        >(updatedConfig);
+
+        return retryResponse;
+      } catch (refreshError) {
+        logger.error("[auth] Token refresh failed:", refreshError);
+        throw refreshError;
+      }
+    }
+
+    logger.error("API Error:", error.message);
+    if (error && showAlertToast && error.message) {
+      // alert toast logic here
+    }
+    throw error;
+  } finally {
+    if (showLoader) hideLoading();
   }
-  return axiosInstance
-    .request<ResponsePayload, ResponsePayload, RequestBody>(apiReqConfig)
-    .then((response) => {
-      if (showSuccessToast) {
-        //success toast
-      }
-      return response;
-    })
-    .catch((error) => {
-      if (error && showAlertToast && error.message) {
-        logger.error("API Error: ", error.message);
-      }
-      throw error;
-    })
-    .finally(() => {
-      if (showLoader) {
-        hideLoading();
-      }
-    });
 };
+
 
 //helper function to show/hide the loader
 const showLoading = () => {
