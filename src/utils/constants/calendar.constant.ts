@@ -1,4 +1,4 @@
-import type { CalendarEvent } from "../types/calendar.type";
+import type { CalendarEvent } from "@NeverLate/types/calendar.type";
 
 export const calenderEvent: CalendarEvent = {
   attendees: [

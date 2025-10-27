@@ -2,11 +2,11 @@ import {
   ApiConfig,
   ApiErrorResponse,
   AxiosRequest,
-} from "../../types/Api.type";
+} from "@NeverLate/types/Api.type";
 import axios, { AxiosError } from "axios";
-import { auth } from "../services/auth.service";
-import { HTTP_STATUS } from "../constants/common.constant";
-import { logger } from "../services/logger.service";
+import { auth } from "@NeverLate/utils/services/auth.service";
+import { HTTP_STATUS } from "@NeverLate/utils/constants/common.constant";
+import { logger } from "@NeverLate/utils/services/logger.service";
 
 let loaderCount = 0;
 

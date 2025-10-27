@@ -1,5 +1,5 @@
-import { DATE_FORMAT } from "../constants/common.constant";
-import { formatDate } from "../helpers/date.helper";
+import { DATE_FORMAT } from "@NeverLate/utils/constants/common.constant";
+import { formatDate } from "@NeverLate/utils/helpers/date.helper";
 
 const colors = {
   Reset: "\x1b[0m",

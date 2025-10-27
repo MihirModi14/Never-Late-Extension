@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN_KEY } from "../constants/storage.constant";
+import { ACCESS_TOKEN_KEY } from "@NeverLate/utils/constants/storage.constant";
 import { storage } from "./storage.service";
 import { logger } from "./logger.service";
 
