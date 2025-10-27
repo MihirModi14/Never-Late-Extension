@@ -5,7 +5,7 @@ import {
 } from "../types/Api.type";
 import axios, { AxiosError } from "axios";
 import { logger } from "../helpers/logger.helper";
-import { getStoredToken } from "../background/auth";
+import { auth } from "../helpers/auth.helper";
 
 let loaderCount = 0;
 
@@ -28,7 +28,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(async (config: AxiosRequest) => {
-  const token = await getStoredToken()
+  const token = await auth.getStoredToken()
   if (token) {
     config.headers.Authorization = "Bearer " + token;
   }
