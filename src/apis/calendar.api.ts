@@ -1,4 +1,4 @@
-import { apiCall } from "../utils/api-manager";
+import { apiCall } from "../helpers/api-manager.helper";
 import { ENDPOINTS } from "../constants/endpoints.constant";
 import { CalendarApiResponse } from "../types/calendar.type";
 
