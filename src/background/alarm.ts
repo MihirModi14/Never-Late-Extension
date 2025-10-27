@@ -1,5 +1,5 @@
-import { ALARM_NAMES } from "../constants/common.constant";
-import { alarm } from "../services/alarm.service";
+import { ALARM_NAMES } from "../utils/constants/common.constant";
+import { alarm } from "../utils/services/alarm.service";
 import { getCalendarEventsApi } from "./calendar";
 
 alarm.removeAll();

@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-// import { logger } from "./helpers/logger.helper";
 import "./App.css";
 import type { CalendarEvent } from "./types/calendar.type";
-import { formatDate } from "./helpers/date.helper";
+import { formatDate } from "./utils/helpers/date.helper";
 import {
   DATE_FORMAT,
   MESSAGE_TYPES,
   STORAGE_KEYS,
-} from "./constants/common.constant";
+} from "./utils/constants/common.constant";
 import { SquareArrowOutUpRight, Users } from "lucide-react";
-import { Message, messaging } from "./services/messaging.service";
-import { storage } from "./services/storage.service";
+import { Message, messaging } from "./utils/services/messaging.service";
+import { storage } from "./utils/services/storage.service";
 
 function App() {
   // State Variables

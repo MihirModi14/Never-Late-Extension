@@ -1,5 +1,5 @@
 import { getCalendarEventsApi } from "./calendar";
-import { auth } from "../services/auth.service";
+import { auth } from "../utils/services/auth.service";
 import "./alarm";
 
 chrome.runtime.onInstalled.addListener(async () => {

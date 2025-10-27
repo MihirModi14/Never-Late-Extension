@@ -2,7 +2,7 @@ import {
   ApiConfig,
   ApiErrorResponse,
   AxiosRequest,
-} from "../types/Api.type";
+} from "../../types/Api.type";
 import axios, { AxiosError } from "axios";
 import { auth } from "../services/auth.service";
 import { HTTP_STATUS } from "../constants/common.constant";

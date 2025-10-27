@@ -1,5 +1,5 @@
-import { apiCall } from "../helpers/api-manager.helper";
-import { ENDPOINTS } from "../constants/endpoints.constant";
+import { apiCall } from "../utils/helpers/api-manager.helper";
+import { ENDPOINTS } from "../utils/constants/endpoints.constant";
 import { CalendarApiResponse } from "../types/calendar.type";
 
 const calendarApi = {

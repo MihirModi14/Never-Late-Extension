@@ -1,8 +1,8 @@
 import { calendarApi } from '../apis/calendar.api';
-import { storage } from '../services/storage.service';
-import { MESSAGE_TYPES, STORAGE_KEYS } from '../constants/common.constant';
-import { messaging } from '../services/messaging.service';
-import { logger } from '../services/logger.service';
+import { storage } from '../utils/services/storage.service';
+import { MESSAGE_TYPES, STORAGE_KEYS } from '../utils/constants/common.constant';
+import { messaging } from '../utils/services/messaging.service';
+import { logger } from '../utils/services/logger.service';
 
 export const getCalendarEventsApi = () => {
   calendarApi.getCalendarList(getParams()).then(response => {
