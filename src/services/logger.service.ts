@@ -1,5 +1,5 @@
 import { DATE_FORMAT } from "../constants/common.constant";
-import { formatDate } from "./date.helper";
+import { formatDate } from "../helpers/date.helper";
 
 const colors = {
   Reset: "\x1b[0m",

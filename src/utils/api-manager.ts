@@ -4,9 +4,9 @@ import {
   AxiosRequest,
 } from "../types/Api.type";
 import axios, { AxiosError } from "axios";
-import { logger } from "../helpers/logger.helper";
-import { auth } from "../helpers/auth.helper";
+import { auth } from "../services/auth.service";
 import { HTTP_STATUS } from "../constants/common.constant";
+import { logger } from "../services/logger.service";
 
 let loaderCount = 0;
 

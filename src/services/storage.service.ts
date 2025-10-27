@@ -1,4 +1,4 @@
-import { logger } from '../helpers/logger.helper';
+import { logger } from "./logger.service";
 
 type StorageKey = string | string[];
 type StorageObject = Record<string, unknown>;

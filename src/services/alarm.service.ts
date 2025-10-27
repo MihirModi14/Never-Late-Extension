@@ -1,5 +1,5 @@
 // alarm.helper.ts
-import { logger } from "./logger.helper";
+import { logger } from "./logger.service";
 
 export interface AlarmOptions {
     periodInMinutes?: number;

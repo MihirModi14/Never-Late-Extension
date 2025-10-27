@@ -1,6 +1,6 @@
 import { ACCESS_TOKEN_KEY } from "../constants/storage.constant";
-import { storage } from "./storage.helper";
-import { logger } from "./logger.helper";
+import { storage } from "./storage.service";
+import { logger } from "./logger.service";
 
 export const auth = {
   /**

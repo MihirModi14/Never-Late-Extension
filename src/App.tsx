@@ -9,8 +9,8 @@ import {
   STORAGE_KEYS,
 } from "./constants/common.constant";
 import { SquareArrowOutUpRight, Users } from "lucide-react";
-import { Message, messaging } from "./helpers/messaging.helper";
-import { storage } from "./helpers/storage.helper";
+import { Message, messaging } from "./services/messaging.service";
+import { storage } from "./services/storage.service";
 
 function App() {
   // State Variables
