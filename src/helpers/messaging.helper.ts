@@ -29,9 +29,11 @@ export const messaging = {
   },
 
   // Listen for incoming messages
-  on: (callback: MessageCallback): void => {
+  on: (type: string, callback: MessageCallback): void => {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      callback(message, sender, sendResponse);
+      if (message.type === type) {
+        callback(message, sender, sendResponse);
+      }
       // Return true to indicate async sendResponse support
       return true;
     });

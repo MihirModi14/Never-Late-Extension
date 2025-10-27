@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { logger } from "./helpers/logger.helper";
+// import { logger } from "./helpers/logger.helper";
 import "./App.css";
 import type { CalendarEvent } from "./types/calendar.type";
 import { formatDate } from "./helpers/date.helper";
 import { DATE_FORMAT } from "./constants/common.constant";
 import { SquareArrowOutUpRight, Users } from "lucide-react";
+import { messaging } from "./helpers/messaging.helper";
+import { storage } from "./helpers/storage.helper";
 
 function App() {
   const [eventList, setEventList] = useState<CalendarEvent[]>([]);
@@ -13,25 +15,14 @@ function App() {
     getEventList();
   }, []);
 
-  const getEventList = () => {
-    chrome.storage.local.get("calendarEvents").then((response: any) => {
-      setEventList(response.calendarEvents || []);
-    });
+  const getEventList = async () => {
+    const eventList: CalendarEvent[] | null = await storage.get(
+      "calendarEvents"
+    );
+    if (eventList) setEventList(eventList || []);
   };
 
-  chrome.runtime.onMessage.addListener(
-    (
-      message: { type: string },
-      sender: chrome.runtime.MessageSender,
-      sendResponse: (response?: any) => void
-    ) => {
-      logger.log("🚀 ~ App ~ sender:", sender);
-      if (message.type === "fetched_meetings") {
-        getEventList();
-        return sendResponse();
-      }
-    }
-  );
+  messaging.on("fetched_meetings", getEventList);
 
   return (
     <section className="border p-[1rem] bg-[var(--background)]">
