@@ -36,3 +36,17 @@ export const getStoredToken = async (): Promise<string> => {
   const token = (await storage.get(ACCESS_TOKEN_KEY)) as string | undefined;
   return token || "";
 };
+
+export const checkLoginAndProceed = async (callback: () => Promise<void> | void): Promise<void> => {
+  let token = await getStoredToken();
+
+  if (!token) {
+    token = await getAccessToken(false);
+  }
+
+  if (token) {
+    await callback();
+  } else {
+    logger.error("[auth] No access token available, cannot proceed.");
+  }
+}

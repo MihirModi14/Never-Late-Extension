@@ -1,9 +1,7 @@
+import { ALARM_NAMES } from "../constants/common.constant";
+import { alarm } from "../helpers/alarm.helper";
 import { getCalendarEventsApi } from "./calendar";
-import { logger } from "../helpers/logger.helper";
 
-chrome.alarms.create("fetchEvents", { periodInMinutes: 30 });
-
-chrome.alarms.onAlarm.addListener((alarm) => {
-  logger.info("fetching meetings", new Date().getTime());
-  if (alarm.name === "fetchEvents") getCalendarEventsApi();
-});
+alarm.removeAll();
+alarm.create(ALARM_NAMES.FETCHED_MEETINGS, { periodInMinutes: 30 });
+alarm.on(ALARM_NAMES.FETCHED_MEETINGS, getCalendarEventsApi);
