@@ -1,9 +1,9 @@
 import { getCalendarEventsApi } from "./calendar";
-import { checkLoginAndProceed } from "./auth";
+import { auth } from "../helpers/auth.helper";
 import "./alarm";
 
 chrome.runtime.onInstalled.addListener(async () => {
-  checkLoginAndProceed(getCalendarEventsApi);
+  auth.checkAndProceed(getCalendarEventsApi);
 });
 
 
