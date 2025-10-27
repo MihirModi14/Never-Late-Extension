@@ -14,7 +14,7 @@ export const alarm = {
                 return;
             }
             chrome.alarms.create(name, options);
-            logger.info(`[alarm] Created '${name}' with options:`, options);
+            logger.info(`[alarm] Created '${name}`);
         });
     },
 
