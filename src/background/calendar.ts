@@ -7,7 +7,7 @@ import { MESSAGE_TYPES, STORAGE_KEYS } from '../constants/common.constant';
 export const getCalendarEventsApi = () => {
   calendarApi.getCalendarList(getParams()).then(response => {
     storage.set({ [STORAGE_KEYS.CALENDAR_EVENTS]: response.items });
-    messaging.send({ type: MESSAGE_TYPES.FETCHED_MEETINGS, [STORAGE_KEYS.CALENDAR_EVENTS]: response.items });
+    messaging.send({ type: MESSAGE_TYPES.FETCH_MEETINGS, [STORAGE_KEYS.CALENDAR_EVENTS]: response.items });
   }).catch(error => {
     logger.error('Error fetching calendar events:', JSON.stringify(error));
   })

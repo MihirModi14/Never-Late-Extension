@@ -22,12 +22,12 @@ function App() {
   }, []);
 
   useEffect(() => {
-    messaging.on(MESSAGE_TYPES.FETCHED_MEETINGS, (message: Message) => {
+    messaging.on(MESSAGE_TYPES.FETCH_MEETINGS, (message: Message) => {
       setEventList(message[STORAGE_KEYS.CALENDAR_EVENTS] || []);
     });
 
     return () => {
-      messaging.off(MESSAGE_TYPES.FETCHED_MEETINGS);
+      messaging.off(MESSAGE_TYPES.FETCH_MEETINGS);
     };
   }, []);
 
