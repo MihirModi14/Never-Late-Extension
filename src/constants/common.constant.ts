@@ -5,16 +5,20 @@ export enum HttpMethod {
   DELETE = 'delete',
 }
 
-export const ERROR_STATUS_CODE = {
-  401: 401,
-  403: 403,
+export const HTTP_STATUS = {
+  SUCCESS: 200,
+  CREATED: 201,
+  NO_CONTENT: 204,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
 };
+
 
 export const DATE_FORMAT = {
   H_M_A: "h:mm a",
   YYYY_MM_DD_H_M: "yyyy-MM-dd HH:mm",
 };
-
 
 export const STORAGE_KEYS = {
   CALENDAR_EVENTS: 'calendarEvents',

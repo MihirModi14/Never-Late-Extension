@@ -6,6 +6,7 @@ import {
 import axios, { AxiosError } from "axios";
 import { logger } from "../helpers/logger.helper";
 import { auth } from "../helpers/auth.helper";
+import { HTTP_STATUS } from "../constants/common.constant";
 
 let loaderCount = 0;
 
@@ -81,7 +82,7 @@ export const apiCall = async <ResponsePayload, RequestBody = undefined>(
 
     return response;
   } catch (error: any) {
-    if (error.response?.status === 401) {
+    if (error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
       logger.warn("[auth] Token expired, attempting refresh...");
 
       try {
