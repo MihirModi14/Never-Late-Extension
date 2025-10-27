@@ -2,12 +2,12 @@ import { messaging } from '../helpers/messaging.helper';
 import { calendarApi } from '../apis/calendar.api';
 import { storage } from '../helpers/storage.helper';
 import { logger } from '../helpers/logger.helper';
+import { MESSAGE_TYPES, STORAGE_KEYS } from '../constants/common.constant';
 
-// Main fetch function
 export const getCalendarEventsApi = () => {
   calendarApi.getCalendarList(getParams()).then(response => {
-    storage.set({ calendarEvents: response.items });
-    messaging.send({ type: 'fetched_meetings' });
+    storage.set({ [STORAGE_KEYS.CALENDAR_EVENTS]: response.items });
+    messaging.send({ type: MESSAGE_TYPES.FETCHED_MEETINGS, [STORAGE_KEYS.CALENDAR_EVENTS]: response.items });
   }).catch(error => {
     logger.error('Error fetching calendar events:', JSON.stringify(error));
   })

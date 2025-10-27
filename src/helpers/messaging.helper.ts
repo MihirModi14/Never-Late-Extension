@@ -1,22 +1,22 @@
+// messaging.helper.ts
 import { logger } from './logger.helper';
 
-// Generic type for messages
 export interface Message {
   type: string;
   [key: string]: any;
 }
 
-// Type for the callback in on()
 export type MessageCallback = (
   message: Message,
   sender: chrome.runtime.MessageSender,
   sendResponse: (response?: any) => void
 ) => void;
 
+const listeners = new Map<string, MessageCallback>();
+
 export const messaging = {
-  // Send a message to the background or other contexts
   send: async <T = unknown>(message: Message): Promise<T | undefined> => {
-    return new Promise<T | undefined>((resolve, _) => {
+    return new Promise<T | undefined>((resolve) => {
       chrome.runtime.sendMessage(message, (response) => {
         if (chrome.runtime.lastError) {
           logger.error('Messaging error:', chrome.runtime.lastError.message);
@@ -28,14 +28,29 @@ export const messaging = {
     });
   },
 
-  // Listen for incoming messages
   on: (type: string, callback: MessageCallback): void => {
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    const listener = (
+      message: Message,
+      sender: chrome.runtime.MessageSender,
+      sendResponse: (response?: any) => void
+    ) => {
       if (message.type === type) {
         callback(message, sender, sendResponse);
       }
-      // Return true to indicate async sendResponse support
       return true;
-    });
+    };
+
+    // Save the original callback reference for .off()
+    listeners.set(type, listener);
+
+    chrome.runtime.onMessage.addListener(listener);
+  },
+
+  off: (type: string): void => {
+    const listener = listeners.get(type);
+    if (listener) {
+      chrome.runtime.onMessage.removeListener(listener);
+      listeners.delete(type);
+    }
   },
 };

@@ -3,27 +3,43 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import type { CalendarEvent } from "./types/calendar.type";
 import { formatDate } from "./helpers/date.helper";
-import { DATE_FORMAT } from "./constants/common.constant";
+import {
+  DATE_FORMAT,
+  MESSAGE_TYPES,
+  STORAGE_KEYS,
+} from "./constants/common.constant";
 import { SquareArrowOutUpRight, Users } from "lucide-react";
-import { messaging } from "./helpers/messaging.helper";
+import { Message, messaging } from "./helpers/messaging.helper";
 import { storage } from "./helpers/storage.helper";
 
 function App() {
+  // State Variables
   const [eventList, setEventList] = useState<CalendarEvent[]>([]);
 
+  // Hooks
   useEffect(() => {
-    getEventList();
+    getEventsFromStorage();
   }, []);
 
-  const getEventList = async () => {
+  useEffect(() => {
+    messaging.on(MESSAGE_TYPES.FETCHED_MEETINGS, (message: Message) => {
+      setEventList(message[STORAGE_KEYS.CALENDAR_EVENTS] || []);
+    });
+
+    return () => {
+      messaging.off(MESSAGE_TYPES.FETCHED_MEETINGS);
+    };
+  }, []);
+
+  // Helper Methods
+  const getEventsFromStorage = async () => {
     const eventList: CalendarEvent[] | null = await storage.get(
-      "calendarEvents"
+      STORAGE_KEYS.CALENDAR_EVENTS
     );
     if (eventList) setEventList(eventList || []);
   };
 
-  messaging.on("fetched_meetings", getEventList);
-
+  // JSX
   return (
     <section className="border p-[1rem] bg-[var(--background)]">
       <div className="flex flex-col gap-[1rem]">

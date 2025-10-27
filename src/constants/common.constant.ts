@@ -14,3 +14,12 @@ export const DATE_FORMAT = {
   H_M_A: "h:mm a",
   YYYY_MM_DD_H_M: "yyyy-MM-dd HH:mm",
 };
+
+
+export const STORAGE_KEYS = {
+  CALENDAR_EVENTS: 'calendarEvents',
+};
+
+export const MESSAGE_TYPES = {
+  FETCHED_MEETINGS: 'fetched_meetings',
+};
