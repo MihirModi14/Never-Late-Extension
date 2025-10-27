@@ -1,4 +1,4 @@
-# 🕒 NeverLate — Smart Calendar Assistant for Chrome
+# 🕒 NeverLate — Smart Calendar Assistant
 
 **NeverLate** is a productivity-focused Chrome Extension that connects seamlessly with your **Google Calendar** to keep you on top of your meetings.  
 It runs silently in the background, automatically fetching your upcoming events and ensuring you’re _never late again._
