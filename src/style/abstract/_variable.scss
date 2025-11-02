@@ -1,35 +1,75 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer base {
   :root {
-    /* Primary */
-    --primary: #111827;
-    --primary-hover: #1f2937;
-
-    /* Background */
     --background: #f9fafb;
+    --foreground: #111827;
+
     --card: #ffffff;
+    --card-foreground: #111827;
 
-    /* Text */
-    --text-primary: #111827;
-    --text-secondary: #374151;
-    --text-tertiary: #6b7280;
-    --text-muted: #9ca3af;
+    --popover: #ffffff;
+    --popover-foreground: #111827;
 
-    /* Borders */
+    --primary: #111827;
+    --primary-foreground: #f9fafb;
+
+    --secondary: #f3f4f6;
+    --secondary-foreground: #111827;
+
+    --muted: #f3f4f6;
+    --muted-foreground: #6b7280;
+
+    --accent: #f3f4f6;
+    --accent-foreground: #111827;
+
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+
     --border: #e5e7eb;
-    --border-light: #f3f4f6;
-    --border-input: #d1d5db;
+    --input: #d1d5db;
+    --ring: #111827;
 
-    /* Status - Ongoing */
-    --status-ongoing-bg: #eff6ff;
-    --status-ongoing-border: #bfdbfe;
-    --status-ongoing-text: #2563eb;
+    --chart-1: #f87171;
+    --chart-2: #34d399;
+    --chart-3: #60a5fa;
+    --chart-4: #fbbf24;
+    --chart-5: #a78bfa;
 
-    /* Optional Badge */
-    --optional-bg: #fffbeb;
-    --optional-text: #d97706;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: #111827;
+    --foreground: #f9fafb;
+
+    --card: #1f2937;
+    --card-foreground: #f9fafb;
+
+    --popover: #1f2937;
+    --popover-foreground: #f9fafb;
+
+    --primary: #f9fafb;
+    --primary-foreground: #111827;
+
+    --secondary: #374151;
+    --secondary-foreground: #f9fafb;
+
+    --muted: #374151;
+    --muted-foreground: #9ca3af;
+
+    --accent: #374151;
+    --accent-foreground: #f9fafb;
+
+    --destructive: #b91c1c;
+    --destructive-foreground: #f9fafb;
+
+    --border: #374151;
+    --input: #4b5563;
+    --ring: #f9fafb;
+
+    --chart-1: #3b82f6;
+    --chart-2: #10b981;
+    --chart-3: #f59e0b;
+    --chart-4: #8b5cf6;
+    --chart-5: #ec4899;
   }
 }

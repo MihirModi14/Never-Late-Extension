@@ -8,8 +8,13 @@ import {
   STORAGE_KEYS,
 } from "@NeverLate/utils/constants/common.constant";
 import { SquareArrowOutUpRight, Users } from "lucide-react";
-import { Message, messaging } from "@NeverLate/utils/services/messaging.service";
+import {
+  Message,
+  messaging,
+} from "@NeverLate/utils/services/messaging.service";
 import { storage } from "@NeverLate/utils/services/storage.service";
+import { Switch } from "@NeverLate/components/ui/switch";
+import { Label } from "./components/ui/label";
 
 function App() {
   // State Variables
@@ -40,17 +45,17 @@ function App() {
 
   // JSX
   return (
-    <section className="border p-[1rem] bg-[var(--background)]">
+    <section className="p-[1rem]">
       <div className="flex flex-col gap-[1rem]">
         {eventList?.map((event: CalendarEvent) => {
           return (
             <div
               key={event.id}
-              className="flex justify-between items-start text-left text-text-primary p-[8px] rounded-[6px] bg-white"
+              className="flex justify-between items-start p-[8px] rounded-[6px]"
             >
-              <div>
-                <h3 className="mb-[4px]">{event.summary}</h3>
-                <div className="mb-[4px] flex gap-[8px]">
+              <div className="text-left">
+                <h3>{event.summary}</h3>
+                <div className="flex gap-[8px]">
                   {event.start?.dateTime && (
                     <p className="text-[1.2rem]">
                       {formatDate(event.start?.dateTime, DATE_FORMAT.H_M_A)}
@@ -63,9 +68,7 @@ function App() {
                     </p>
                   )}
                 </div>
-                {event.description && (
-                  <p className="text-[1.2rem] mb-[4px]">{event.description}</p>
-                )}
+                {event.description && <p>{event.description}</p>}
                 {event.attendees && event.attendees.length > 0 && (
                   <p className="flex items-center gap-[6px]">
                     <Users className="size-[1.2rem]" />
@@ -75,18 +78,21 @@ function App() {
                   </p>
                 )}
               </div>
+
               {event.hangoutLink && (
-                <a
-                  target="_blank"
-                  href={event.hangoutLink}
-                  className="rounded-[6px] bg-[var(--primary)] inline-block p-[5px]"
-                >
-                  <SquareArrowOutUpRight className="text-white size-[1.2rem]" />
+                <a target="_blank" href={event.hangoutLink}>
+                  <SquareArrowOutUpRight className="size-[1.4rem]" />
                 </a>
               )}
             </div>
           );
         })}
+      </div>
+      <div className="text-left">
+        <Switch id="airplane-mode" />
+        <Label htmlFor="airplane-mode" className="text-[1.4rem]">
+          Airplane Mode
+        </Label>
       </div>
     </section>
   );
