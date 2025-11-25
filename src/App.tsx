@@ -17,7 +17,9 @@ import { storage } from "@NeverLate/utils/services/storage.service";
 function App() {
   // State Variables
   const [eventList, setEventList] = useState<CalendarEvent[]>([]);
+  const [filterEventList, setFilterEventList] = useState<CalendarEvent[]>([]);
   const [showPastMeetings, setShowPastMeetings] = useState<boolean>(false);
+  const [showOptional, setShowOptional] = useState<boolean>(true);
 
   // Hooks
   useEffect(() => {
@@ -32,8 +34,23 @@ function App() {
   }, [showPastMeetings]);
 
   useEffect(() => {
+    if (showOptional) {
+      setFilterEventList(eventList);
+      return;
+    }
+    const filterEvents = eventList.filter((event) => {
+      const me = event.attendees?.find((a) => a.self);
+      if (!me) return true;
+      return me?.optional !== true;
+    });
+    setFilterEventList(filterEvents);
+  }, [showOptional, eventList]);
+
+  useEffect(() => {
     messaging.on(MESSAGE_TYPES.FETCH_MEETINGS, (message: Message) => {
-      setEventList(message[STORAGE_KEYS.CALENDAR_EVENTS] || []);
+      const eventList = message[STORAGE_KEYS.CALENDAR_EVENTS] || [];
+      setEventList(eventList);
+      setFilterEventList(eventList);
     });
 
     return () => {
@@ -55,7 +72,6 @@ function App() {
       <div>
         <label htmlFor="showPast">Show Past Meetings </label>
         <input
-          name="showPast"
           type="checkbox"
           checked={showPastMeetings}
           onChange={() => {
@@ -64,8 +80,19 @@ function App() {
         />
       </div>
 
+      <div>
+        <label htmlFor="showOptionalMeeting">Show Optional Meetings </label>
+        <input
+          type="checkbox"
+          checked={showOptional}
+          onChange={() => {
+            setShowOptional(!showOptional);
+          }}
+        />
+      </div>
+
       <div className="flex flex-col gap-[1rem]">
-        {eventList?.map((event: CalendarEvent) => {
+        {filterEventList?.map((event: CalendarEvent) => {
           return (
             <div
               key={event.id}
