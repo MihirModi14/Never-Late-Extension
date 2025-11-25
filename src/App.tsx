@@ -28,23 +28,18 @@ function App() {
 
   useEffect(() => {
     messaging.send({
-      type: MESSAGE_TYPES.UPDATE_MEETINGS,
+      type: MESSAGE_TYPES.SHOW_PAST_MEETINGS,
       showPastMeetings: showPastMeetings,
     });
   }, [showPastMeetings]);
 
   useEffect(() => {
-    if (showOptional) {
-      setFilterEventList(eventList);
-      return;
-    }
-    const filterEvents = eventList.filter((event) => {
-      const me = event.attendees?.find((a) => a.self);
-      if (!me) return true;
-      return me?.optional !== true;
+    messaging.send({
+      type: MESSAGE_TYPES.SHOW_OPTIONAL_MEETINGS,
+      showOptional: showOptional,
+      eventList: eventList,
     });
-    setFilterEventList(filterEvents);
-  }, [showOptional, eventList]);
+  }, [showOptional]);
 
   useEffect(() => {
     messaging.on(MESSAGE_TYPES.FETCH_MEETINGS, (message: Message) => {
@@ -53,8 +48,13 @@ function App() {
       setFilterEventList(eventList);
     });
 
+    messaging.on(MESSAGE_TYPES.SHOW_OPTIONAL_MEETINGS, (message: Message) => {
+      setFilterEventList(message.eventList);
+    });
+
     return () => {
       messaging.off(MESSAGE_TYPES.FETCH_MEETINGS);
+      messaging.off(MESSAGE_TYPES.SHOW_OPTIONAL_MEETINGS);
     };
   }, []);
 
