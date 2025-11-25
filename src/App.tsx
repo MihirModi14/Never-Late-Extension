@@ -13,17 +13,23 @@ import {
   messaging,
 } from "@NeverLate/utils/services/messaging.service";
 import { storage } from "@NeverLate/utils/services/storage.service";
-import { Switch } from "@NeverLate/components/ui/switch";
-import { Label } from "./components/ui/label";
 
 function App() {
   // State Variables
   const [eventList, setEventList] = useState<CalendarEvent[]>([]);
+  const [showPastMeetings, setShowPastMeetings] = useState<boolean>(false);
 
   // Hooks
   useEffect(() => {
     getEventsFromStorage();
   }, []);
+
+  useEffect(() => {
+    messaging.send({
+      type: MESSAGE_TYPES.UPDATE_MEETINGS,
+      showPastMeetings: showPastMeetings,
+    });
+  }, [showPastMeetings]);
 
   useEffect(() => {
     messaging.on(MESSAGE_TYPES.FETCH_MEETINGS, (message: Message) => {
@@ -46,6 +52,18 @@ function App() {
   // JSX
   return (
     <section className="p-[1rem]">
+      <div>
+        <label htmlFor="showPast">Show Past Meetings </label>
+        <input
+          name="showPast"
+          type="checkbox"
+          checked={showPastMeetings}
+          onChange={() => {
+            setShowPastMeetings(!showPastMeetings);
+          }}
+        />
+      </div>
+
       <div className="flex flex-col gap-[1rem]">
         {eventList?.map((event: CalendarEvent) => {
           return (
@@ -87,12 +105,6 @@ function App() {
             </div>
           );
         })}
-      </div>
-      <div className="text-left">
-        <Switch id="airplane-mode" />
-        <Label htmlFor="airplane-mode" className="text-[1.4rem]">
-          Airplane Mode
-        </Label>
       </div>
     </section>
   );

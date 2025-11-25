@@ -4,8 +4,12 @@ import { MESSAGE_TYPES, STORAGE_KEYS } from '@NeverLate/utils/constants/common.c
 import { messaging } from '@NeverLate/utils/services/messaging.service';
 import { logger } from '@NeverLate/utils/services/logger.service';
 
-export const getCalendarEventsApi = () => {
-  calendarApi.getCalendarList(getParams()).then(response => {
+type CalenderParams = {
+  showPastMeetings?: boolean
+}
+
+export const getCalendarEventsApi = (params: CalenderParams) => {
+  calendarApi.getCalendarList(getParams(params)).then(response => {
     storage.set({ [STORAGE_KEYS.CALENDAR_EVENTS]: response.items });
     messaging.send({ type: MESSAGE_TYPES.FETCH_MEETINGS, [STORAGE_KEYS.CALENDAR_EVENTS]: response.items });
   }).catch(error => {
@@ -13,10 +17,13 @@ export const getCalendarEventsApi = () => {
   })
 };
 
-const getParams = (): URLSearchParams => {
+const getParams = (params: CalenderParams): URLSearchParams => {
+  const { showPastMeetings = false } = params;
+
   const now = new Date();
   const startOfDay = new Date(now);
-  startOfDay.setHours(0, 0, 0, 0);
+
+  if (showPastMeetings) startOfDay.setHours(0, 0, 0, 0);
 
   const endOfDay = new Date(now);
   endOfDay.setHours(23, 59, 59, 999);

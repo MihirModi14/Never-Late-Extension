@@ -26,6 +26,7 @@ export const STORAGE_KEYS = {
 
 export const MESSAGE_TYPES = {
   FETCH_MEETINGS: 'fetch_meetings',
+  UPDATE_MEETINGS: 'update_meetings',
 };
 
 export const ALARM_NAMES = {
