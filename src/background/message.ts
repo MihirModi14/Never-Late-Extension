@@ -48,6 +48,10 @@ messaging.on(MESSAGE_TYPES.UPDATE_ALARM, async () => {
     for (let i = 0; i < eventList.length; i++) {
         const eventTime = eventList[i].start?.dateTime;
         if (!eventTime) continue;
+        if (eventList[i].attendees) {
+            const me = eventList[i].attendees?.find((a) => a.self);
+            if (me?.optional) continue;
+        }
 
         const target = new Date(eventTime).getTime();
         const diffMs = target - now;

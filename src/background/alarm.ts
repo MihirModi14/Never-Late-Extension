@@ -40,9 +40,9 @@ alarm.onAny(async (alarmInfo) => {
         );
     } else if (meetingAction === "NOTIFICATION") {
         chrome.notifications.create({
-            type: 'basic',
-            iconUrl: 'icon.png',
-            title: 'Meeting Time!',
+            type: "basic",
+            iconUrl: "logo.jpg",
+            title: "Meeting Alert",
             message: meeting.summary || 'Your meeting is starting'
         });
     }

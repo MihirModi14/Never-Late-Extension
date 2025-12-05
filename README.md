@@ -28,8 +28,7 @@ It runs silently in the background, automatically fetching your upcoming events 
 
 
 <!-- TASK -->
-<!-- remove optional meetings from alarm -->
-
+<!-- remove meeting from list once finished -->
 
 
 

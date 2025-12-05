@@ -3,17 +3,36 @@
   "name": "Never Late Extension",
   "version": "1.0.0",
   "description": "Get timely reminders for your tasks and meetings with this extension.",
-  "permissions": ["identity", "storage", "alarms", "notifications"],
+  "permissions": [
+    "identity",
+    "storage",
+    "alarms",
+    "notifications"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "logo.jpg"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
   "action": {
     "default_popup": "index.html",
-    "matches": ["<all_urls>"]
+    "matches": [
+      "<all_urls>"
+    ]
   },
   "oauth2": {
     "client_id": "5119441177-e1i1mj69u1cd2mefdnaueh6ma9m6a27l.apps.googleusercontent.com",
-    "scopes": ["https://www.googleapis.com/auth/calendar.readonly"]
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar.readonly"
+    ]
   }
 }
