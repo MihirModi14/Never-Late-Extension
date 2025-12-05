@@ -51,7 +51,7 @@ export const auth = {
   /**
    * Check login; if not logged in, perform login, then run callback.
    */
-  checkAndProceed: async (callback: () => Promise<void> | void): Promise<void> => {
+  login: async (): Promise<void> => {
     try {
       let token = await auth.getStoredToken();
 
@@ -62,7 +62,6 @@ export const auth = {
 
       if (token) {
         logger.info("[auth] Token available, proceeding...");
-        await callback();
       } else {
         logger.error("[auth] No access token available, cannot proceed.");
       }

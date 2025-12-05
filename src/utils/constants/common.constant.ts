@@ -22,14 +22,22 @@ export const DATE_FORMAT = {
 
 export const STORAGE_KEYS = {
   CALENDAR_EVENTS: 'calendarEvents',
+  SHOW_PAST_MEETINGS: 'showPastMeetings',
+  SHOW_OPTIONAL_MEETINGS: 'showOptionalMeetings',
+  MEETING_ACTION: 'meetingAction',
+  OPEN_MEETING_BEFORE: 'openMeetingBefore',
+  SHOW_NOTIFICATION_BEFORE: 'showNotificationBefore',
 };
 
 export const MESSAGE_TYPES = {
   FETCH_MEETINGS: 'fetch_meetings',
+  MEETINGS_UPDATED: 'meetings_updated',
   SHOW_PAST_MEETINGS: 'show_past_meetings',
   SHOW_OPTIONAL_MEETINGS: 'show_optional_meetings',
+  UPDATE_ALARM: 'update_alarm',
 };
 
 export const ALARM_NAMES = {
   FETCH_MEETINGS: 'fetch_meetings',
+  MEETING_TIME: 'meeting_time',
 };

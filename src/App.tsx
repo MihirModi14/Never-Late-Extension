@@ -12,58 +12,114 @@ import {
   Message,
   messaging,
 } from "@NeverLate/utils/services/messaging.service";
-import { storage } from "@NeverLate/utils/services/storage.service";
+import { storage } from "./utils/services/storage.service";
+import { isEmptyValue } from "./utils/helpers/common.helper";
 
 function App() {
   // State Variables
   const [eventList, setEventList] = useState<CalendarEvent[]>([]);
-  const [filterEventList, setFilterEventList] = useState<CalendarEvent[]>([]);
-  const [showPastMeetings, setShowPastMeetings] = useState<boolean>(false);
-  const [showOptional, setShowOptional] = useState<boolean>(true);
+  const [showPastMeetings, setShowPastMeetings] = useState<boolean>();
+  const [showOptional, setShowOptional] = useState<boolean>();
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const [meetingAction, setMeetingAction] = useState<
+    "NEW_TAB" | "NOTIFICATION" | "NOTHING" | undefined
+  >(undefined);
+  const [openBefore, setOpenBefore] = useState<number>(0);
+  const [notificationBefore, setNotificationBefore] =
+    useState<number>(0);
 
   // Hooks
   useEffect(() => {
+    loadPreferencesFromStorage();
     getEventsFromStorage();
   }, []);
 
   useEffect(() => {
+    if (!isLoading) return;
+    if (isEmptyValue(showPastMeetings)) return;
+
+    storage.set({ [STORAGE_KEYS.SHOW_PAST_MEETINGS]: showPastMeetings });
     messaging.send({
       type: MESSAGE_TYPES.SHOW_PAST_MEETINGS,
-      showPastMeetings: showPastMeetings,
     });
   }, [showPastMeetings]);
 
   useEffect(() => {
+    if (!isLoading) return;
+    if (isEmptyValue(showOptional)) return;
+
+    storage.set({ [STORAGE_KEYS.SHOW_OPTIONAL_MEETINGS]: showOptional });
     messaging.send({
       type: MESSAGE_TYPES.SHOW_OPTIONAL_MEETINGS,
-      showOptional: showOptional,
-      eventList: eventList,
     });
   }, [showOptional]);
 
   useEffect(() => {
-    messaging.on(MESSAGE_TYPES.FETCH_MEETINGS, (message: Message) => {
-      const eventList = message[STORAGE_KEYS.CALENDAR_EVENTS] || [];
-      setEventList(eventList);
-      setFilterEventList(eventList);
-    });
+    // if (!isLoading) return;
+    if (!meetingAction) return;
 
-    messaging.on(MESSAGE_TYPES.SHOW_OPTIONAL_MEETINGS, (message: Message) => {
-      setFilterEventList(message.eventList);
+    storage.set({
+      [STORAGE_KEYS.MEETING_ACTION]: meetingAction,
+      [STORAGE_KEYS.OPEN_MEETING_BEFORE]: openBefore,
+      [STORAGE_KEYS.SHOW_NOTIFICATION_BEFORE]: notificationBefore,
+    });
+    messaging.send({
+      type: MESSAGE_TYPES.UPDATE_ALARM
+    });
+  }, [
+    meetingAction,
+    openBefore,
+    notificationBefore,
+    eventList
+  ]);
+
+  useEffect(() => {
+    messaging.removeAll();
+    messaging.on(MESSAGE_TYPES.MEETINGS_UPDATED, (message: Message) => {
+      const eventList = message[STORAGE_KEYS.CALENDAR_EVENTS] || [];
+      setIsLoading(false);
+      setEventList(eventList);
     });
 
     return () => {
-      messaging.off(MESSAGE_TYPES.FETCH_MEETINGS);
-      messaging.off(MESSAGE_TYPES.SHOW_OPTIONAL_MEETINGS);
+      messaging.removeAll();
     };
   }, []);
 
   // Helper Methods
+  const loadPreferencesFromStorage = async () => {
+    const showPastMeetings = await storage.get(STORAGE_KEYS.SHOW_PAST_MEETINGS);
+    const showOptional = await storage.get(STORAGE_KEYS.SHOW_OPTIONAL_MEETINGS);
+    const action = await storage.get(STORAGE_KEYS.MEETING_ACTION);
+    const openBefore = await storage.get(STORAGE_KEYS.OPEN_MEETING_BEFORE);
+    const notifyBefore = await storage.get(STORAGE_KEYS.SHOW_NOTIFICATION_BEFORE);
+
+    setShowPastMeetings(showPastMeetings ? Boolean(showPastMeetings) : false);
+    setShowOptional(showOptional ? Boolean(showOptional) : true);
+
+    if (
+      action === "NEW_TAB" ||
+      action === "NOTIFICATION" ||
+      action === "NOTHING"
+    ) {
+      setMeetingAction(action);
+    } else {
+      setMeetingAction("NEW_TAB");
+    }
+    if (typeof openBefore === "number") setOpenBefore(openBefore);
+    if (typeof notifyBefore === "number")
+      setNotificationBefore(notifyBefore);
+  };
+
   const getEventsFromStorage = async () => {
     const eventList: CalendarEvent[] | null = await storage.get(
       STORAGE_KEYS.CALENDAR_EVENTS
     );
-    if (eventList) setEventList(eventList || []);
+
+    if (eventList) {
+      setEventList(eventList || []);
+    }
   };
 
   // JSX
@@ -75,6 +131,7 @@ function App() {
           type="checkbox"
           checked={showPastMeetings}
           onChange={() => {
+            setIsLoading(true);
             setShowPastMeetings(!showPastMeetings);
           }}
         />
@@ -86,13 +143,83 @@ function App() {
           type="checkbox"
           checked={showOptional}
           onChange={() => {
+            setIsLoading(true);
             setShowOptional(!showOptional);
           }}
         />
       </div>
 
+      <div className="flex flex-col gap-[0.5rem] mt-[1rem]">
+        <h3>Meeting Actions</h3>
+        <div className="flex items-center gap-[0.5rem]">
+          <input
+            type="radio"
+            id="action-new-tab"
+            name="meetingAction"
+            value="NEW_TAB"
+            checked={meetingAction === "NEW_TAB"}
+            onChange={() => setMeetingAction("NEW_TAB")}
+          />
+          <label htmlFor="action-new-tab">Open Meeting Link</label>
+        </div>
+
+        {meetingAction === "NEW_TAB" && (
+          <div className="ml-[1.5rem]">
+            <label htmlFor="openBefore">Open before (minutes): </label>
+            <input
+              type="number"
+              id="openBefore"
+              min={0}
+              value={openBefore}
+              onChange={(e) => setOpenBefore(Number(e.target.value))}
+              className="border rounded p-[2px] w-[50px] text-black"
+            />
+          </div>
+        )}
+
+        <div className="flex items-center gap-[0.5rem]">
+          <input
+            type="radio"
+            id="action-notification"
+            name="meetingAction"
+            value="NOTIFICATION"
+            checked={meetingAction === "NOTIFICATION"}
+            onChange={() => setMeetingAction("NOTIFICATION")}
+          />
+          <label htmlFor="action-notification">Show Notification</label>
+        </div>
+
+        {meetingAction === "NOTIFICATION" && (
+          <div className="ml-[1.5rem]">
+            <label htmlFor="notifyBefore">Notify before (minutes): </label>
+            <input
+              type="number"
+              id="notifyBefore"
+              min={0}
+              value={notificationBefore}
+              onChange={(e) =>
+                setNotificationBefore(Number(e.target.value))
+              }
+              className="border rounded p-[2px] w-[50px] text-black"
+            />
+          </div>
+        )}
+
+        <div className="flex items-center gap-[0.5rem]">
+          <input
+            type="radio"
+            id="action-nothing"
+            name="meetingAction"
+            value="NOTHING"
+            checked={meetingAction === "NOTHING"}
+            onChange={() => setMeetingAction("NOTHING")}
+          />
+          <label htmlFor="action-nothing">Do Nothing</label>
+        </div>
+      </div>
+      {isLoading && <p>Loading...</p>}
       <div className="flex flex-col gap-[1rem]">
-        {filterEventList?.map((event: CalendarEvent) => {
+        {eventList?.map((event: CalendarEvent) => {
           return (
             <div
               key={event.id}
@@ -113,7 +240,7 @@ function App() {
                     </p>
                   )}
                 </div>
-                {event.description && <p>{event.description}</p>}
+                {event.description && <p dangerouslySetInnerHTML={{ __html: event.description }}></p>}
                 {event.attendees && event.attendees.length > 0 && (
                   <p className="flex items-center gap-[6px]">
                     <Users className="size-[1.2rem]" />

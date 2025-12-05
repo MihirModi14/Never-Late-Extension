@@ -15,7 +15,7 @@ export const logger = {
 
   log(...args: unknown[]) {
     console.log(
-      `${colors.FgGreen}[INFO]${colors.Reset
+      `${colors.FgGreen}[LOG]${colors.Reset
       } [${this.currentDateTime()}]: ${args.join(" ")}`
     );
   },

@@ -25,3 +25,13 @@ It runs silently in the background, automatically fetching your upcoming events 
 | **Styling**             | Tailwind CSS, shadcn/ui            |
 
 ---
+
+
+<!-- TASK -->
+<!-- remove optional meetings from alarm -->
+
+
+
+
+<!-- NEED TO FIND ARCHITECTURE FOR THIS -->
+<!-- first render api call - temporary solved using isLoading state variable -->

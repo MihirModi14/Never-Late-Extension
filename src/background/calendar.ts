@@ -11,7 +11,7 @@ type CalenderParams = {
 export const getCalendarEventsApi = (params: CalenderParams) => {
   calendarApi.getCalendarList(getParams(params)).then(response => {
     storage.set({ [STORAGE_KEYS.CALENDAR_EVENTS]: response.items });
-    messaging.send({ type: MESSAGE_TYPES.FETCH_MEETINGS, [STORAGE_KEYS.CALENDAR_EVENTS]: response.items });
+    messaging.send({ type: MESSAGE_TYPES.MEETINGS_UPDATED, [STORAGE_KEYS.CALENDAR_EVENTS]: response.items });
   }).catch(error => {
     logger.error('Error fetching calendar events:', JSON.stringify(error));
   })

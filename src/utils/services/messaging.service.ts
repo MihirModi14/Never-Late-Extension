@@ -53,4 +53,12 @@ export const messaging = {
       listeners.delete(type);
     }
   },
+
+  removeAll: (): void => {
+    listeners.forEach((listener) => {
+      chrome.runtime.onMessage.removeListener(listener);
+    });
+    listeners.clear();
+    logger.info("[message] Cleared all message listeners");
+  },
 };
