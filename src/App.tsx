@@ -31,7 +31,7 @@ function App() {
   const [openBefore, setOpenBefore] = useState<number>(0);
   const [notificationBefore, setNotificationBefore] =
     useState<number>(0);
-  const [syncMeeting, setSyncMeeting] = useState<number>(60);
+  const [syncMeeting, setSyncMeeting] = useState<number>();
 
   // Hooks
   useEffect(() => {
@@ -66,7 +66,6 @@ function App() {
       [STORAGE_KEYS.MEETING_ACTION]: meetingAction,
       [STORAGE_KEYS.OPEN_MEETING_BEFORE]: openBefore,
       [STORAGE_KEYS.SHOW_NOTIFICATION_BEFORE]: notificationBefore,
-      [STORAGE_KEYS.SYNC_MEETING_TIME]: syncMeeting,
     });
     messaging.send({
       type: MESSAGE_TYPES.UPDATE_ALARM
@@ -75,7 +74,19 @@ function App() {
     meetingAction,
     openBefore,
     notificationBefore,
-    eventList,
+    eventList
+  ]);
+
+  useEffect(() => {
+    if (!syncMeeting) return;
+
+    storage.set({
+      [STORAGE_KEYS.SYNC_MEETING_TIME]: syncMeeting,
+    });
+    messaging.send({
+      type: MESSAGE_TYPES.UPDATE_SYNC_TIME
+    });
+  }, [
     syncMeeting
   ]);
 

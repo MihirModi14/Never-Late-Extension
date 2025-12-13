@@ -5,6 +5,7 @@ import { CalendarEvent } from "@NeverLate/types/calendar.type";
 import { storage } from "@NeverLate/utils/services/storage.service";
 import { isEmptyValue } from "@NeverLate/utils/helpers/common.helper";
 import { alarm } from "@NeverLate/utils/services/alarm.service";
+import { logger } from "@NeverLate/utils/services/logger.service";
 
 messaging.removeAll();
 messaging.on(MESSAGE_TYPES.SHOW_PAST_MEETINGS, async () => {
@@ -38,14 +39,16 @@ messaging.on(MESSAGE_TYPES.SHOW_OPTIONAL_MEETINGS, async () => {
     });
 })
 
-messaging.on(MESSAGE_TYPES.UPDATE_ALARM, async () => {
+messaging.on(MESSAGE_TYPES.UPDATE_SYNC_TIME, async () => {
     const syncMeetingTime: number | null = await storage.get(STORAGE_KEYS.SYNC_MEETING_TIME);
-    const eventList: CalendarEvent[] | null = await storage.get(STORAGE_KEYS.CALENDAR_EVENTS);
 
     await alarm.clearAll().then(() => {
         alarm.create(ALARM_NAMES.FETCH_MEETINGS, { periodInMinutes: syncMeetingTime || 60 });
     });
+});
 
+export const updateAlarm = async () => {
+    const eventList: CalendarEvent[] | null = await storage.get(STORAGE_KEYS.CALENDAR_EVENTS);
     if (!eventList?.length) return;
 
     const notifyBefore: number = await getNotifiyTimeBefore();
@@ -66,8 +69,9 @@ messaging.on(MESSAGE_TYPES.UPDATE_ALARM, async () => {
             alarm.create(alarmName, { when: target });
         }
     }
-});
+}
 
+messaging.on(MESSAGE_TYPES.UPDATE_ALARM, updateAlarm);
 
 const getNotifiyTimeBefore = async () => {
     const meetingAction: string | null = await storage.get(STORAGE_KEYS.MEETING_ACTION);

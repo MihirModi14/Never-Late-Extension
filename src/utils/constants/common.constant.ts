@@ -36,6 +36,7 @@ export const MESSAGE_TYPES = {
   SHOW_PAST_MEETINGS: 'show_past_meetings',
   SHOW_OPTIONAL_MEETINGS: 'show_optional_meetings',
   UPDATE_ALARM: 'update_alarm',
+  UPDATE_SYNC_TIME: 'update_sync_time',
 };
 
 export const ALARM_NAMES = {
