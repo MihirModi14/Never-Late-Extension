@@ -5,7 +5,6 @@ import type { CalendarEvent } from "@NeverLate/types/calendar.type";
 import { storage } from "@NeverLate/utils/services/storage.service";
 import { logger } from "@NeverLate/utils/services/logger.service";
 
-alarm.clearAll();
 alarm.on(ALARM_NAMES.FETCH_MEETINGS, () => {
     getCalendarEventsApi({})
 });
@@ -35,10 +34,9 @@ alarm.onAny(async (alarmInfo) => {
 
     // Handle the meeting based on meetingAction
     if (meetingAction === MEETING_ACTION.NEW_TAB && meeting.hangoutLink) {
-        console.log("meeting open")
-        // chrome.tabs.create(
-        //     { url: meeting.hangoutLink, active: true }
-        // );
+        chrome.tabs.create(
+            { url: meeting.hangoutLink, active: true }
+        );
     } else if (meetingAction === MEETING_ACTION.NOTIFICATION) {
         chrome.notifications.create({
             type: "basic",

@@ -31,6 +31,7 @@ function App() {
   const [openBefore, setOpenBefore] = useState<number>(0);
   const [notificationBefore, setNotificationBefore] =
     useState<number>(0);
+  const [syncMeeting, setSyncMeeting] = useState<number>(60);
 
   // Hooks
   useEffect(() => {
@@ -59,13 +60,13 @@ function App() {
   }, [showOptional]);
 
   useEffect(() => {
-    // if (!isLoading) return;
     if (!meetingAction) return;
 
     storage.set({
       [STORAGE_KEYS.MEETING_ACTION]: meetingAction,
       [STORAGE_KEYS.OPEN_MEETING_BEFORE]: openBefore,
       [STORAGE_KEYS.SHOW_NOTIFICATION_BEFORE]: notificationBefore,
+      [STORAGE_KEYS.SYNC_MEETING_TIME]: syncMeeting,
     });
     messaging.send({
       type: MESSAGE_TYPES.UPDATE_ALARM
@@ -74,7 +75,8 @@ function App() {
     meetingAction,
     openBefore,
     notificationBefore,
-    eventList
+    eventList,
+    syncMeeting
   ]);
 
   useEffect(() => {
@@ -96,6 +98,7 @@ function App() {
     const showOptional = await storage.get(STORAGE_KEYS.SHOW_OPTIONAL_MEETINGS);
     const action = await storage.get(STORAGE_KEYS.MEETING_ACTION);
     const openBefore = await storage.get(STORAGE_KEYS.OPEN_MEETING_BEFORE);
+    const syncMeetingTime = await storage.get(STORAGE_KEYS.SYNC_MEETING_TIME);
     const notifyBefore = await storage.get(STORAGE_KEYS.SHOW_NOTIFICATION_BEFORE);
 
     setShowPastMeetings(showPastMeetings ? Boolean(showPastMeetings) : false);
@@ -113,6 +116,8 @@ function App() {
     if (typeof openBefore === "number") setOpenBefore(openBefore);
     if (typeof notifyBefore === "number")
       setNotificationBefore(notifyBefore);
+    if (typeof syncMeetingTime === "number")
+      setSyncMeeting(syncMeetingTime);
   };
 
   const getEventsFromStorage = async () => {
@@ -222,6 +227,22 @@ function App() {
           <label htmlFor="action-nothing">Do Nothing</label>
         </div>
       </div>
+
+      <div className="flex flex-col gap-[0.5rem] mt-[1rem]">
+        <h3>Sync</h3>
+        <div className="ml-[1.5rem]">
+          <label htmlFor="syncMeeting">Fetch meeting every: </label>
+          <input
+            type="number"
+            min={1}
+            id="syncMeeting"
+            value={syncMeeting}
+            onChange={(e) => setSyncMeeting(Number(e.target.value))}
+            className="border rounded p-[2px] w-[50px] text-black"
+          />
+        </div>
+      </div>
+
       {isLoading && <p>Loading...</p>}
       <div className="flex flex-col gap-[1rem]">
         {eventList?.map((event: CalendarEvent) => {

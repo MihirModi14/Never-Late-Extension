@@ -39,10 +39,15 @@ messaging.on(MESSAGE_TYPES.SHOW_OPTIONAL_MEETINGS, async () => {
 })
 
 messaging.on(MESSAGE_TYPES.UPDATE_ALARM, async () => {
+    const syncMeetingTime: number | null = await storage.get(STORAGE_KEYS.SYNC_MEETING_TIME);
     const eventList: CalendarEvent[] | null = await storage.get(STORAGE_KEYS.CALENDAR_EVENTS);
+
+    await alarm.clearAll().then(() => {
+        alarm.create(ALARM_NAMES.FETCH_MEETINGS, { periodInMinutes: syncMeetingTime || 60 });
+    });
+
     if (!eventList?.length) return;
 
-    await alarm.clearAll();
     const notifyBefore: number = await getNotifiyTimeBefore();
 
     for (let i = 0; i < eventList.length; i++) {

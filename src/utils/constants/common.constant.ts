@@ -27,6 +27,7 @@ export const STORAGE_KEYS = {
   MEETING_ACTION: 'meetingAction',
   OPEN_MEETING_BEFORE: 'openMeetingBefore',
   SHOW_NOTIFICATION_BEFORE: 'showNotificationBefore',
+  SYNC_MEETING_TIME: 'syncMeetingTime',
 };
 
 export const MESSAGE_TYPES = {
