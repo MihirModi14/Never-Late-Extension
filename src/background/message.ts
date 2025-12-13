@@ -1,4 +1,4 @@
-import { ALARM_NAMES, MESSAGE_TYPES, STORAGE_KEYS } from "@NeverLate/utils/constants/common.constant";
+import { ALARM_NAMES, MEETING_ACTION, MESSAGE_TYPES, STORAGE_KEYS } from "@NeverLate/utils/constants/common.constant";
 import { messaging } from "@NeverLate/utils/services/messaging.service";
 import { getCalendarEventsApi } from "./calendar";
 import { CalendarEvent } from "@NeverLate/types/calendar.type";
@@ -43,7 +43,7 @@ messaging.on(MESSAGE_TYPES.UPDATE_ALARM, async () => {
     if (!eventList?.length) return;
 
     await alarm.clearAll();
-    const now = Date.now();
+    const notifyBefore: number = await getNotifiyTimeBefore();
 
     for (let i = 0; i < eventList.length; i++) {
         const eventTime = eventList[i].start?.dateTime;
@@ -53,8 +53,8 @@ messaging.on(MESSAGE_TYPES.UPDATE_ALARM, async () => {
             if (me?.optional) continue;
         }
 
-        const target = new Date(eventTime).getTime();
-        const diffMs = target - now;
+        const target = new Date(eventTime).getTime() - (notifyBefore * 60 * 1000);
+        const diffMs = target - Date.now();
 
         if (diffMs > 0) {
             const alarmName = `${ALARM_NAMES.MEETING_TIME}_${i}`;
@@ -63,3 +63,23 @@ messaging.on(MESSAGE_TYPES.UPDATE_ALARM, async () => {
     }
 });
 
+
+const getNotifiyTimeBefore = async () => {
+    const meetingAction: string | null = await storage.get(STORAGE_KEYS.MEETING_ACTION);
+    if (isEmptyValue(meetingAction)) return 0;
+
+    switch (meetingAction) {
+        case MEETING_ACTION.NEW_TAB:
+            const openBefore: number | null = await storage.get(STORAGE_KEYS.OPEN_MEETING_BEFORE);
+            if (isEmptyValue(openBefore)) return 0;
+            return openBefore || 0;
+
+        case MEETING_ACTION.NOTIFICATION:
+            const notifyBefore: number | null = await storage.get(STORAGE_KEYS.OPEN_MEETING_BEFORE);
+            if (isEmptyValue(notifyBefore)) return 0;
+            return notifyBefore || 0;
+
+        default:
+            return 0;
+    }
+}

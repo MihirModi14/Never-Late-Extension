@@ -4,6 +4,7 @@ import type { CalendarEvent } from "@NeverLate/types/calendar.type";
 import { formatDate } from "@NeverLate/utils/helpers/date.helper";
 import {
   DATE_FORMAT,
+  MEETING_ACTION,
   MESSAGE_TYPES,
   STORAGE_KEYS,
 } from "@NeverLate/utils/constants/common.constant";
@@ -15,6 +16,8 @@ import {
 import { storage } from "./utils/services/storage.service";
 import { isEmptyValue } from "./utils/helpers/common.helper";
 
+type MeetingAction = (typeof MEETING_ACTION)[keyof typeof MEETING_ACTION];
+
 function App() {
   // State Variables
   const [eventList, setEventList] = useState<CalendarEvent[]>([]);
@@ -23,7 +26,7 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const [meetingAction, setMeetingAction] = useState<
-    "NEW_TAB" | "NOTIFICATION" | "NOTHING" | undefined
+    MeetingAction | undefined
   >(undefined);
   const [openBefore, setOpenBefore] = useState<number>(0);
   const [notificationBefore, setNotificationBefore] =
@@ -99,13 +102,13 @@ function App() {
     setShowOptional(showOptional ? Boolean(showOptional) : true);
 
     if (
-      action === "NEW_TAB" ||
-      action === "NOTIFICATION" ||
-      action === "NOTHING"
+      action === MEETING_ACTION.NEW_TAB ||
+      action === MEETING_ACTION.NOTIFICATION ||
+      action === MEETING_ACTION.NOTHING
     ) {
       setMeetingAction(action);
     } else {
-      setMeetingAction("NEW_TAB");
+      setMeetingAction(MEETING_ACTION.NEW_TAB);
     }
     if (typeof openBefore === "number") setOpenBefore(openBefore);
     if (typeof notifyBefore === "number")
@@ -156,20 +159,21 @@ function App() {
             type="radio"
             id="action-new-tab"
             name="meetingAction"
-            value="NEW_TAB"
-            checked={meetingAction === "NEW_TAB"}
-            onChange={() => setMeetingAction("NEW_TAB")}
+            value={MEETING_ACTION.NEW_TAB}
+            checked={meetingAction === MEETING_ACTION.NEW_TAB}
+            onChange={() => setMeetingAction(MEETING_ACTION.NEW_TAB)}
           />
           <label htmlFor="action-new-tab">Open Meeting Link</label>
         </div>
 
-        {meetingAction === "NEW_TAB" && (
+        {meetingAction === MEETING_ACTION.NEW_TAB && (
           <div className="ml-[1.5rem]">
             <label htmlFor="openBefore">Open before (minutes): </label>
             <input
               type="number"
               id="openBefore"
               min={0}
+              max={20}
               value={openBefore}
               onChange={(e) => setOpenBefore(Number(e.target.value))}
               className="border rounded p-[2px] w-[50px] text-black"
@@ -182,20 +186,21 @@ function App() {
             type="radio"
             id="action-notification"
             name="meetingAction"
-            value="NOTIFICATION"
-            checked={meetingAction === "NOTIFICATION"}
-            onChange={() => setMeetingAction("NOTIFICATION")}
+            value={MEETING_ACTION.NOTIFICATION}
+            checked={meetingAction === MEETING_ACTION.NOTIFICATION}
+            onChange={() => setMeetingAction(MEETING_ACTION.NOTIFICATION)}
           />
           <label htmlFor="action-notification">Show Notification</label>
         </div>
 
-        {meetingAction === "NOTIFICATION" && (
+        {meetingAction === MEETING_ACTION.NOTIFICATION && (
           <div className="ml-[1.5rem]">
             <label htmlFor="notifyBefore">Notify before (minutes): </label>
             <input
               type="number"
               id="notifyBefore"
               min={0}
+              max={20}
               value={notificationBefore}
               onChange={(e) =>
                 setNotificationBefore(Number(e.target.value))
@@ -210,9 +215,9 @@ function App() {
             type="radio"
             id="action-nothing"
             name="meetingAction"
-            value="NOTHING"
-            checked={meetingAction === "NOTHING"}
-            onChange={() => setMeetingAction("NOTHING")}
+            value={MEETING_ACTION.NOTHING}
+            checked={meetingAction === MEETING_ACTION.NOTHING}
+            onChange={() => setMeetingAction(MEETING_ACTION.NOTHING)}
           />
           <label htmlFor="action-nothing">Do Nothing</label>
         </div>

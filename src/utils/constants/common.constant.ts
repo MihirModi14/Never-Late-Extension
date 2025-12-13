@@ -41,3 +41,9 @@ export const ALARM_NAMES = {
   FETCH_MEETINGS: 'fetch_meetings',
   MEETING_TIME: 'meeting_time',
 };
+
+export const MEETING_ACTION = {
+  NEW_TAB: "NEW_TAB",
+  NOTIFICATION: "NOTIFICATION",
+  NOTHING: "NOTHING",
+}

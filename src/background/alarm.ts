@@ -1,4 +1,4 @@
-import { ALARM_NAMES, STORAGE_KEYS } from "@NeverLate/utils/constants/common.constant";
+import { ALARM_NAMES, MEETING_ACTION, STORAGE_KEYS } from "@NeverLate/utils/constants/common.constant";
 import { alarm } from "@NeverLate/utils/services/alarm.service";
 import { getCalendarEventsApi } from "./calendar";
 import type { CalendarEvent } from "@NeverLate/types/calendar.type";
@@ -34,11 +34,12 @@ alarm.onAny(async (alarmInfo) => {
     }
 
     // Handle the meeting based on meetingAction
-    if (meetingAction === "NEW_TAB" && meeting.hangoutLink) {
-        chrome.tabs.create(
-            { url: meeting.hangoutLink, active: true }
-        );
-    } else if (meetingAction === "NOTIFICATION") {
+    if (meetingAction === MEETING_ACTION.NEW_TAB && meeting.hangoutLink) {
+        console.log("meeting open")
+        // chrome.tabs.create(
+        //     { url: meeting.hangoutLink, active: true }
+        // );
+    } else if (meetingAction === MEETING_ACTION.NOTIFICATION) {
         chrome.notifications.create({
             type: "basic",
             iconUrl: "logo.jpg",
