@@ -5,14 +5,13 @@ import { CalendarEvent } from "@NeverLate/types/calendar.type";
 import { storage } from "@NeverLate/utils/services/storage.service";
 import { isEmptyValue } from "@NeverLate/utils/helpers/common.helper";
 import { alarm } from "@NeverLate/utils/services/alarm.service";
-import { logger } from "@NeverLate/utils/services/logger.service";
 
 messaging.removeAll();
 messaging.on(MESSAGE_TYPES.SHOW_PAST_MEETINGS, async () => {
     const showPastMeetings: boolean | null = await storage.get(STORAGE_KEYS.SHOW_PAST_MEETINGS);
 
     if (isEmptyValue(showPastMeetings)) return;
-    getCalendarEventsApi({ showPastMeetings: Boolean(showPastMeetings) })
+    getCalendarEventsApi()
 })
 
 messaging.on(MESSAGE_TYPES.SHOW_OPTIONAL_MEETINGS, async () => {

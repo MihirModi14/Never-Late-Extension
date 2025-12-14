@@ -6,7 +6,7 @@ import { storage } from "@NeverLate/utils/services/storage.service";
 import { logger } from "@NeverLate/utils/services/logger.service";
 
 alarm.on(ALARM_NAMES.FETCH_MEETINGS, () => {
-    getCalendarEventsApi({})
+    getCalendarEventsApi()
 });
 
 // Listen to all meeting alarms with a pattern

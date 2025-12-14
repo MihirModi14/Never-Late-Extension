@@ -5,12 +5,9 @@ import { messaging } from '@NeverLate/utils/services/messaging.service';
 import { logger } from '@NeverLate/utils/services/logger.service';
 import { updateAlarm } from './message';
 
-type CalenderParams = {
-  showPastMeetings?: boolean
-}
-
-export const getCalendarEventsApi = (params: CalenderParams) => {
-  calendarApi.getCalendarList(getParams(params)).then(response => {
+export const getCalendarEventsApi = async () => {
+  const params = await getParams();
+  calendarApi.getCalendarList(params).then(response => {
     storage.set({ [STORAGE_KEYS.CALENDAR_EVENTS]: response.items });
     messaging.send({ type: MESSAGE_TYPES.MEETINGS_UPDATED, [STORAGE_KEYS.CALENDAR_EVENTS]: response.items });
     updateAlarm();
@@ -19,8 +16,8 @@ export const getCalendarEventsApi = (params: CalenderParams) => {
   })
 };
 
-const getParams = (params: CalenderParams): URLSearchParams => {
-  const { showPastMeetings = false } = params;
+const getParams = async (): Promise<URLSearchParams> => {
+  const showPastMeetings: boolean | null = await storage.get(STORAGE_KEYS.SHOW_PAST_MEETINGS);
 
   const now = new Date();
   const startOfDay = new Date(now);

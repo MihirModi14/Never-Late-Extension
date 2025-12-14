@@ -1,13 +1,14 @@
 import { CalendarEvent } from "@NeverLate/types/calendar.type";
 import { MEETING_ACTION, MESSAGE_TYPES, STORAGE_KEYS } from "@NeverLate/utils/constants/common.constant";
 import { isEmptyValue } from "@NeverLate/utils/helpers/common.helper";
-import { Message, messaging } from "@NeverLate/utils/services/messaging.service";
+import { messaging } from "@NeverLate/utils/services/messaging.service";
 import { storage } from "@NeverLate/utils/services/storage.service";
 import { useEffect, useState } from "react";
 
 type MeetingAction = (typeof MEETING_ACTION)[keyof typeof MEETING_ACTION];
 
-export const Options = ({ isLoading, setIsLoading, eventList, setEventList }: { isLoading: boolean, setIsLoading: (isLoading: boolean) => void, eventList: CalendarEvent[], setEventList(eventList: CalendarEvent[]): void }) => {
+export const Options = ({ isLoading, setIsLoading, eventList }: { isLoading: boolean, setIsLoading(isLoading: boolean): void, eventList: CalendarEvent[] }) => {
+    // State Variables
     const [showPastMeetings, setShowPastMeetings] = useState<boolean>();
     const [showOptional, setShowOptional] = useState<boolean>();
 
@@ -17,12 +18,12 @@ export const Options = ({ isLoading, setIsLoading, eventList, setEventList }: { 
     const [openBefore, setOpenBefore] = useState<number>(0);
     const [notificationBefore, setNotificationBefore] =
         useState<number>(0);
+
     const [syncMeeting, setSyncMeeting] = useState<number>();
 
     // Hooks
     useEffect(() => {
         loadPreferencesFromStorage();
-        getEventsFromStorage();
     }, []);
 
     useEffect(() => {
@@ -72,22 +73,7 @@ export const Options = ({ isLoading, setIsLoading, eventList, setEventList }: { 
         messaging.send({
             type: MESSAGE_TYPES.UPDATE_SYNC_TIME
         });
-    }, [
-        syncMeeting
-    ]);
-
-    useEffect(() => {
-        messaging.removeAll();
-        messaging.on(MESSAGE_TYPES.MEETINGS_UPDATED, (message: Message) => {
-            const eventList = message[STORAGE_KEYS.CALENDAR_EVENTS] || [];
-            setIsLoading(false);
-            setEventList(eventList);
-        });
-
-        return () => {
-            messaging.removeAll();
-        };
-    }, []);
+    }, [syncMeeting]);
 
     // Helper Methods
     const loadPreferencesFromStorage = async () => {
@@ -115,16 +101,6 @@ export const Options = ({ isLoading, setIsLoading, eventList, setEventList }: { 
             setNotificationBefore(notifyBefore);
         if (typeof syncMeetingTime === "number")
             setSyncMeeting(syncMeetingTime);
-    };
-
-    const getEventsFromStorage = async () => {
-        const eventList: CalendarEvent[] | null = await storage.get(
-            STORAGE_KEYS.CALENDAR_EVENTS
-        );
-
-        if (eventList) {
-            setEventList(eventList || []);
-        }
     };
 
     return <>
