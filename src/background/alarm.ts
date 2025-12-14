@@ -33,10 +33,19 @@ alarm.onAny(async (alarmInfo) => {
     }
 
     // Handle the meeting based on meetingAction
-    if (meetingAction === MEETING_ACTION.NEW_TAB && meeting.hangoutLink) {
-        chrome.tabs.create(
-            { url: meeting.hangoutLink, active: true }
-        );
+    if (meetingAction === MEETING_ACTION.NEW_TAB) {
+        if (meeting.hangoutLink) {
+            chrome.tabs.create(
+                { url: meeting.hangoutLink, active: true }
+            );
+        } else {
+            chrome.notifications.create({
+                type: "basic",
+                iconUrl: "logo.jpg",
+                title: "Meeting Alert",
+                message: meeting.summary || 'Your meeting is starting'
+            });
+        }
     } else if (meetingAction === MEETING_ACTION.NOTIFICATION) {
         chrome.notifications.create({
             type: "basic",
