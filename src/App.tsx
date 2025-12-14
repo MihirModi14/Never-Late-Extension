@@ -23,8 +23,6 @@ function App() {
     const eventList: CalendarEvent[] | null = await storage.get(
       STORAGE_KEYS.CALENDAR_EVENTS
     );
-    logger.log("event list", eventList?.length)
-
     if (eventList) {
       setEventList(eventList || []);
     }
