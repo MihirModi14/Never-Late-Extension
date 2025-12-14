@@ -7,7 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 import { MESSAGE_TYPES, STORAGE_KEYS } from "./utils/constants/common.constant";
 import { storage } from "./utils/services/storage.service";
 import { Message, messaging } from "./utils/services/messaging.service";
-import { logger } from "./utils/services/logger.service";
 
 function App() {
   // State Variables
