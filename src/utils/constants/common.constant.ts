@@ -18,6 +18,7 @@ export const HTTP_STATUS = {
 export const DATE_FORMAT = {
   H_M_A: "h:mm a",
   YYYY_MM_DD_H_M: "yyyy-MM-dd HH:mm",
+  MMM_DD: "MMM dd"
 };
 
 export const STORAGE_KEYS = {

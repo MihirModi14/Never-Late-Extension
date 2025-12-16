@@ -4,7 +4,7 @@ import { formatDate } from "@NeverLate/utils/helpers/date.helper";
 import { SquareArrowOutUpRight, Users } from "lucide-react";
 
 export const EventList = ({ isLoading, eventList }: { eventList: CalendarEvent[], isLoading: boolean }) => {
-    return <>
+    return <section>
         {isLoading && <p>Loading...</p>}
         <div className="flex flex-col gap-[1rem]">
             {eventList?.map((event: CalendarEvent) => {
@@ -47,5 +47,6 @@ export const EventList = ({ isLoading, eventList }: { eventList: CalendarEvent[]
                     </div>
                 );
             })}
-        </div></>
+        </div>
+    </section>
 }
