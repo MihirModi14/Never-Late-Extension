@@ -7,6 +7,10 @@ import { isEmptyValue } from "@NeverLate/utils/helpers/common.helper";
 import { alarm } from "@NeverLate/utils/services/alarm.service";
 
 messaging.removeAll();
+messaging.on(MESSAGE_TYPES.FETCH_MEETINGS, async () => {
+    getCalendarEventsApi();
+})
+
 messaging.on(MESSAGE_TYPES.SHOW_PAST_MEETINGS, async () => {
     const showPastMeetings: boolean | null = await storage.get(STORAGE_KEYS.SHOW_PAST_MEETINGS);
 

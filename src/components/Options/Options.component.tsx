@@ -111,8 +111,8 @@ export const Options = ({
   };
 
   return (
-    <section className="px-[1.4rem] py-[1.4rem] select-none">
-      <div className="flex flex-col gap-[4px] border px-[1.2rem] py-[1rem] rounded-[6px]">
+    <section className="p-[1.4rem] select-none">
+      <div className="bg-[white] flex flex-col gap-[4px] border px-[1.2rem] py-[1rem] rounded-[6px]">
         <div className="mb-[6px] flex gap-[8px] items-center">
           <Calendar className="size-[1.6rem]" />
           <h3 className="text-[1.6rem]">Display Options</h3>
@@ -147,14 +147,14 @@ export const Options = ({
           />
         </div>
       </div>
-      <div className="mt-[1.6rem] flex flex-col gap-[4px] border px-[1.2rem] py-[1rem] rounded-[6px]">
+      <div className="bg-[white] mt-[1.4rem] flex flex-col gap-[4px] border px-[1.2rem] py-[1rem] rounded-[6px]">
         <div className="mb-[6px] flex gap-[8px] items-center">
           <Bell className="size-[1.6rem]" />
           <h3 className="text-[1.6rem]">Meeting Actions</h3>
         </div>
         <div className="flex flex-col gap-[4px]">
           <div>
-            <div className="flex items-center gap-[0.5rem]">
+            <div className="flex items-center gap-[5px]">
               <input
                 type="radio"
                 id="action-new-tab"
@@ -183,7 +183,7 @@ export const Options = ({
           </div>
 
           <div>
-            <div className="flex items-center gap-[0.5rem]">
+            <div className="flex items-center gap-[5px]">
               <input
                 type="radio"
                 id="action-notification"
@@ -213,7 +213,7 @@ export const Options = ({
             )}
           </div>
 
-          <div className="flex items-center gap-[0.5rem]">
+          <div className="flex items-center gap-[5px]">
             <input
               type="radio"
               id="action-nothing"
@@ -226,7 +226,7 @@ export const Options = ({
           </div>
         </div>
       </div>
-      <div className="mt-[1.6rem] flex flex-col gap-[4px] border px-[1.2rem] py-[1rem] rounded-[6px]">
+      <div className="bg-[white] mt-[1.4rem] flex flex-col gap-[4px] border px-[1.2rem] py-[1rem] rounded-[6px]">
         <div className="mb-[6px] flex gap-[8px] items-center">
           <RefreshCcw className="size-[1.6rem]" />
           <h3 className="text-[1.6rem]">Sync Settings</h3>
