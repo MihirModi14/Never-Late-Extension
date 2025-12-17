@@ -57,7 +57,7 @@ export const auth = {
 
       if (!token) {
         logger.info("[auth] No stored token found, attempting login...");
-        token = await auth.getAccessToken(false);
+        token = await auth.getAccessToken(true);
       }
 
       if (token) {

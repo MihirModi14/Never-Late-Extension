@@ -108,6 +108,7 @@ export const Options = ({
     if (typeof openBefore === "number") setOpenBefore(openBefore);
     if (typeof notifyBefore === "number") setNotificationBefore(notifyBefore);
     if (typeof syncMeetingTime === "number") setSyncMeeting(syncMeetingTime);
+    else { setSyncMeeting(60); }
   };
 
   return (
