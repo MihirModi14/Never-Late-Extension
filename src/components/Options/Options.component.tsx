@@ -93,7 +93,7 @@ export const Options = ({
       STORAGE_KEYS.SHOW_NOTIFICATION_BEFORE
     );
 
-    setShowPastMeetings(showPastMeetings ? Boolean(showPastMeetings) : false);
+    setShowPastMeetings(showPastMeetings ? Boolean(showPastMeetings) : true);
     setShowOptional(showOptional ? Boolean(showOptional) : true);
 
     if (
